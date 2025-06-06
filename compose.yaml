@@ -1,0 +1,38 @@
+name: 'socialite'
+
+include:
+  - path:
+      - ./posts/compose.yaml
+      - ./docker/posts.override.yaml
+  - path:
+      - ./users/compose.yaml
+      - ./docker/users.override.yaml
+  - path:
+      - ./auth/compose.yaml
+      - ./docker/auth.override.yaml
+
+services:
+  gateway:
+    build:
+      context: ./gateway
+      target: dev
+    env_file:
+      - path: ./gateway/.env
+        required: true
+      - path: ./gateway/.env.dev
+        required: false
+    volumes:
+      - type: bind
+        source: ./gateway/etc/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./gateway/etc/nginx/proxy_params.conf
+        target: /etc/nginx/proxy_params.conf
+      - ./gateway/html:/usr/share/nginx/html
+    ports:
+      - 3000:80
+    depends_on:
+      users:
+        condition: service_healthy
+      posts:
+        condition: service_healthy

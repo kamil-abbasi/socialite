@@ -1,0 +1,63 @@
+services:
+  posts:
+    build:
+      context: ./core
+      target: dev
+    env_file:
+      - path: ./core/.env
+        required: true
+      - path: ./core/.env.dev
+        required: false
+    volumes:
+      - ./core/src:/app/src
+      - ./core/test:/app/test
+    depends_on:
+      posts-db:
+        condition: service_healthy
+    healthcheck:
+      test: curl localhost:3000/healthcheck
+      timeout: 10s
+      start_period: 15s
+
+  posts-db:
+    build:
+      context: ./db
+    env_file:
+      - path: ./db/.env
+        required: true
+      - path: ./db/.env.dev
+        required: false
+    volumes:
+      - posts-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      timeout: 30s
+      retries: 5
+      start_period: 20s
+
+  posts-gateway:
+    build:
+      context: ./gateway
+      target: dev
+    profiles: [gateway]
+    env_file:
+      - path: ./gateway/.env
+        required: true
+      - path: ./gateway/.env.dev
+        required: false
+    volumes:
+      - type: bind
+        source: ./gateway/etc/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./gateway/etc/nginx/proxy_params.conf
+        target: /etc/nginx/proxy_params.conf
+      - ./gateway/html:/usr/share/nginx/html
+    ports:
+      - 4000:80
+    depends_on:
+      posts:
+        condition: service_healthy
+
+volumes:
+  posts-db-data:

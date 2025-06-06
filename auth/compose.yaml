@@ -1,0 +1,44 @@
+services:
+  auth:
+    build:
+      context: ./core
+      target: dev
+    env_file:
+      - path: ./core/.env
+        required: true
+      - path: ./core/.env.dev
+        required: false
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && cat <&3 | grep -q '200 OK'",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    ports:
+      - 9000:8080
+
+  auth-db:
+    build:
+      context: ./db
+    env_file:
+      - path: ./db/.env
+        required: true
+      - path: ./db/.env.dev
+        required: false
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD', 'pg_isready']
+      timeout: 30s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  auth-db-data:

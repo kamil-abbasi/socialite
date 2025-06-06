@@ -1,0 +1,1 @@
+docker compose --profile gateway up -d --build
