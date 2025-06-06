@@ -1,1 +1,1 @@
-# yaml-language-server: $schema=compose-spec.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/refs/heads/main/schema/compose-spec.json
