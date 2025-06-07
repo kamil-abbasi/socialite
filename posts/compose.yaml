@@ -1,6 +1,5 @@
 services:
   posts:
-    container_name: core
     build:
       context: ./core
       target: dev
@@ -21,7 +20,6 @@ services:
       start_period: 15s
 
   posts-db:
-    container_name: db
     build:
       context: ./db
     env_file:
@@ -38,7 +36,6 @@ services:
       start_period: 20s
 
   posts-gateway:
-    container_name: gateway
     build:
       context: ./gateway
       target: dev

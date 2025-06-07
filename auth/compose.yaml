@@ -1,6 +1,5 @@
 services:
   auth:
-    container_name: core
     build:
       context: ./core
       target: dev
@@ -26,7 +25,6 @@ services:
       - 9000:8080
 
   auth-db:
-    container_name: db
     build:
       context: ./db
     env_file:
