@@ -12,6 +12,8 @@ After running above command, backend will be accessible on [`http://localhost:30
 You can run part of the backend by executing `<root>/<service-name>/startup.sh`.
 For example if you want to run only `posts` service (with database and gateway), run this [script](../posts/startup.sh). After that `posts` service should be accessible on [`http://localhost:4000`](http://localhost:4000) on default port. To check routes, [look at posts gateway configuration](../posts/gateway/etc/nginx/nginx.conf). Running other services is analogous.
 
+**important**: _make sure you execute specific service startup script from it's directory (for example to start posts service execute startup script from [`<root>/posts`](../posts/))._
+
 <table>
   <tr>
     <th>service</th>
