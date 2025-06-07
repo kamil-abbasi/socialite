@@ -8,7 +8,7 @@ import { HttpExceptionFilter } from './common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({
-      prefix: 'Socialite',
+      prefix: 'Posts',
     }),
   });
 
