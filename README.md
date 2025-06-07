@@ -1,6 +1,6 @@
 # What is this project?
 
-Facebook like app, created for learning purposes. It will allow to create posts, upload videos, add comments etc. It will also have ai-powered features (recomendations, insights).
+Social media like app, created for learning purposes. It will allow to create posts, upload videos, add comments etc. It will also have ai-powered features (recomendations, insights).
 
 # How to run
 
